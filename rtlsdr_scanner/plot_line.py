@@ -87,8 +87,8 @@ class Plotter(object):
         norm = Normalize(vmin=-50, vmax=0)
         
         self.scalarMap = ScalarMappable(norm=norm)
-        self.barBase = ColorbarBase(self.bar, norm=norm)
-        # self.toto = self.figure.colorbar(self.scalarMap, ax=self.bar)
+        # self.barBase = ColorbarBase(self.bar, norm=norm)
+        self.barBase = self.figure.colorbar(self.scalarMap, ax=self.bar)
         # self.barBase = self.toto
         self.set_colourmap_use(self.settings.colourMapUse)
 
@@ -408,9 +408,11 @@ class Plotter(object):
             self.set_bar(False)
         else:
             self.set_bar(True)
+
+        # this is deprecated, work on the scalarMap directly
+        # self.barBase.set_cmap(colourMap)
+        self.scalarMap.set_cmap(colourMap)
         
-        self.barBase.set_cmap(colourMap)
-        # self.toto.set_cmap(colourMap)
         try:
             self.barBase.draw_all()
         except:
