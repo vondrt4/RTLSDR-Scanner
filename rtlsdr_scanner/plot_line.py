@@ -85,7 +85,11 @@ class Plotter(object):
 
         self.bar = self.figure.add_subplot(gs[1])
         norm = Normalize(vmin=-50, vmax=0)
+        
+        self.scalarMap = ScalarMappable(norm=norm)
         self.barBase = ColorbarBase(self.bar, norm=norm)
+        # self.toto = self.figure.colorbar(self.scalarMap, ax=self.bar)
+        # self.barBase = self.toto
         self.set_colourmap_use(self.settings.colourMapUse)
 
         self.__setup_measure()
@@ -130,7 +134,7 @@ class Plotter(object):
             self.lines[Markers.OFS].set_path_effects([effect])
             self.lines[Markers.OFE].set_path_effects([effect])
 
-        for line in self.lines.itervalues():
+        for line in list(self.lines.values()):
             self.axes.add_line(line)
 
         bbox = self.axes.bbox
@@ -170,7 +174,7 @@ class Plotter(object):
                                         ha="center", va="top", bbox=box,
                                         color='#996600')
 
-        for label in self.labels.itervalues():
+        for label in list(self.labels.values()):
             self.axes.add_artist(label)
 
     def __setup_overflow(self):
@@ -194,7 +198,7 @@ class Plotter(object):
                                              transform=self.axes.transAxes,
                                              alpha=0.5)
 
-        for label in self.overflowLabels.itervalues():
+        for label in list(self.overflowLabels.values()):
             self.axes.add_artist(label)
 
     def __clear_overflow(self):
@@ -238,7 +242,7 @@ class Plotter(object):
             self.overflow['right'].append(marker)
 
     def __draw_overflow(self):
-        for pos, overflow in self.overflow.iteritems():
+        for pos, overflow in list(self.overflow.items()):
             if len(overflow) > 0:
                 text = ''
                 for measure in overflow:
@@ -298,11 +302,11 @@ class Plotter(object):
         self.__draw_overflow()
 
     def hide_measure(self):
-        for line in self.lines.itervalues():
+        for line in list(self.lines.values()):
             line.set_visible(False)
-        for label in self.labels.itervalues():
+        for label in list(self.labels.values()):
             label.set_visible(False)
-        for label in self.overflowLabels.itervalues():
+        for label in list(self.overflowLabels.values()):
             label.set_visible(False)
 
     def scale_plot(self, force=False):
@@ -404,7 +408,9 @@ class Plotter(object):
             self.set_bar(False)
         else:
             self.set_bar(True)
+        
         self.barBase.set_cmap(colourMap)
+        # self.toto.set_cmap(colourMap)
         try:
             self.barBase.draw_all()
         except:
@@ -481,7 +487,7 @@ class ThreadPlot(threading.Thread):
             else:
                 alpha = 1
 
-            data = spectrum[timeStamp].items()
+            data = list(spectrum[timeStamp].items())
             peakF, peakL = self.extent.get_peak_fl()
 
             segments, levels = self.__create_segments(data)
@@ -499,7 +505,7 @@ class ThreadPlot(threading.Thread):
         return peakF, peakL
 
     def __plot_single(self, points):
-        data = points.items()
+        data = list(points.items())
         peakF, peakL = max(data, key=lambda item: item[1])
 
         segments, levels = self.__create_segments(data)
@@ -528,7 +534,7 @@ class ThreadPlot(threading.Thread):
 
         for timeStamp in self.data:
 
-            for x, y in self.data[timeStamp].items():
+            for x, y in list(self.data[timeStamp].items()):
                 if x in points:
                     points[x] = (points[x] + y) / 2
                 else:
@@ -547,7 +553,7 @@ class ThreadPlot(threading.Thread):
         lastX = None
         lastYMin = None
         lastYMax = None
-        for x in pointsMin.iterkeys():
+        for x in list(pointsMin.keys()):
             if lastX is None:
                 lastX = x
             if lastYMin is None:
@@ -631,7 +637,7 @@ class ThreadPlot(threading.Thread):
         sweep, indices = get_peaks(self.data, self.settings.peaksThres)
 
         for i in indices:
-            self.axes.plot(sweep.keys()[i], sweep.values()[i],
+            self.axes.plot(list(sweep.keys())[i], list(sweep.values())[i],
                            linestyle='None',
                            marker='+', markersize=10, color='r',
                            gid='peakThres')
@@ -640,7 +646,7 @@ class ThreadPlot(threading.Thread):
         points = OrderedDict()
 
         for timeStamp in self.data:
-            for x, y in self.data[timeStamp].items():
+            for x, y in list(self.data[timeStamp].items()):
                 if x in points:
                     points[x] = min(points[x], y)
                 else:
@@ -652,7 +658,7 @@ class ThreadPlot(threading.Thread):
         points = OrderedDict()
 
         for timeStamp in self.data:
-            for x, y in self.data[timeStamp].items():
+            for x, y in list(self.data[timeStamp].items()):
                 if x in points:
                     points[x] = max(points[x], y)
                 else:
@@ -706,5 +712,5 @@ class ThreadPlot(threading.Thread):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

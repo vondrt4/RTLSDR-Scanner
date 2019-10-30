@@ -144,7 +144,7 @@ def nearest(value, values):
 
 
 def haversine(lat1, lat2, lon1, lon2):
-    lat1, lat2, lon1, lon2 = map(radians, [lat1, lat2, lon1, lon2])
+    lat1, lat2, lon1, lon2 = list(map(radians, [lat1, lat2, lon1, lon2]))
 
     dlon = lon1 - lon2
     dlat = lat1 - lat2
@@ -215,5 +215,5 @@ def limit_to_ascii(text):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

@@ -23,7 +23,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import cPickle
+import pickle
 from collections import OrderedDict
 import datetime
 import glob
@@ -48,19 +48,19 @@ from rtlsdr_scanner.spectrum import create_mesh, sort_spectrum
 
 class File(object):
     class Types(object):
-        SAVE, PLOT, IMAGE, GEO, GMAP, TRACK, CONT = range(7)
+        SAVE, PLOT, IMAGE, GEO, GMAP, TRACK, CONT = list(range(7))
 
     class SaveType(object):
         RFS = 0
 
     class PlotType(object):
-        CSV, GNUPLOT, FREEMAT, WWB = range(4)
+        CSV, GNUPLOT, FREEMAT, WWB = list(range(4))
 
     class ImageType(object):
-        BMP, EPS, GIF, JPEG, PDF, PNG, PPM, TIFF = range(8)
+        BMP, EPS, GIF, JPEG, PDF, PNG, PPM, TIFF = list(range(8))
 
     class GeoType(object):
-        KMZ, CSV, BMP, EPS, GIF, JPEG, PDF, PNG, PPM, TIFF = range(10)
+        KMZ, CSV, BMP, EPS, GIF, JPEG, PDF, PNG, PPM, TIFF = list(range(10))
 
     class GMapType(object):
         HTML = 0
@@ -129,7 +129,7 @@ class File(object):
 
         filters = ''
         length = len(types)
-        for i in xrange(length):
+        for i in range(length):
             filters += types[i]
             if i < length - 1:
                 filters += '|'
@@ -142,7 +142,7 @@ class File(object):
 
         pretty = ''
         length = len(types)
-        for i in xrange(length):
+        for i in range(length):
             pretty += File.get_type_ext(i, type)
             if i < length - 2:
                 pretty += ', '
@@ -154,7 +154,7 @@ class File(object):
     @staticmethod
     def get_type_index(extension, type=Types.PLOT):
         exports = File.__get_types(type)
-        for i in xrange(len(exports)):
+        for i in range(len(exports)):
             if extension == File.get_type_ext(i, type):
                 return i
 
@@ -230,13 +230,13 @@ class Backups(object):
                     os.remove(backup)
                 except:
                     pass
-        files.sort(lambda x, y: cmp(x[1], y[1]), reverse=True)
+        files.sort(key=lambda x: x[1], reverse=True)
 
         return files
 
     def __save(self, data):
         handle = open(self.tempFile, 'wb')
-        cPickle.dump(data, handle)
+        pickle.dump(data, handle)
         handle.close()
         self.thread = None
 
@@ -253,7 +253,7 @@ class Backups(object):
     def load(self, index):
         backup = self.backups[index][0]
         handle = open(backup, 'rb')
-        data = cPickle.load(handle)
+        data = pickle.load(handle)
         handle.close()
 
         return data
@@ -301,19 +301,19 @@ def open_plot(dirname, filename):
         return None, None, None
     handle = open(path, 'rb')
     try:
-        header = cPickle.load(handle)
-    except cPickle.UnpicklingError:
+        header = pickle.load(handle)
+    except pickle.UnpicklingError:
         pickle = False
     except EOFError:
         pickle = False
 
     if pickle:
         try:
-            _version = cPickle.load(handle)
-            start = cPickle.load(handle)
-            stop = cPickle.load(handle)
+            _version = pickle.load(handle)
+            start = pickle.load(handle)
+            stop = pickle.load(handle)
             spectrum[1] = {}
-            spectrum[1] = cPickle.load(handle)
+            spectrum[1] = pickle.load(handle)
         except pickle.PickleError:
             error = True
     else:
@@ -340,18 +340,18 @@ def open_plot(dirname, filename):
                 lon = data[1]['Longitude']
             if version < 7:
                 spectrum[1] = {}
-                for f, p in data[1]['Spectrum'].iteritems():
+                for f, p in list(data[1]['Spectrum'].items()):
                     spectrum[1][float(f)] = p
             else:
-                for t, s in data[1]['Spectrum'].iteritems():
+                for t, s in list(data[1]['Spectrum'].items()):
                     spectrum[float(t)] = {}
-                    for f, p in s.iteritems():
+                    for f, p in list(s.items()):
                         spectrum[float(t)][float(f)] = p
             if version > 7:
                 desc = data[1]['Description']
             if version > 8:
                 location = {}
-                for t, l in data[1]['Location'].iteritems():
+                for t, l in list(data[1]['Location'].items()):
                     location[float(t)] = l
 
         except ValueError:
@@ -467,10 +467,10 @@ def export_map(filename, exportType, bounds, image, xyz):
 
 def export_csv(handle, spectrum, header=True):
     if header:
-        handle.write(u"Time (UTC), Frequency (MHz),Level (dB/Hz)\n")
+        handle.write("Time (UTC), Frequency (MHz),Level (dB/Hz)\n")
     if spectrum is not None:
-        for plot in spectrum.iteritems():
-            for freq, pwr in plot[1].iteritems():
+        for plot in list(spectrum.items()):
+            for freq, pwr in list(plot[1].items()):
                 handle.write("{}, {}, {}\n".format(plot[0], freq, pwr))
 
 
@@ -486,9 +486,9 @@ def export_plt(handle, spectrum):
     handle.write('set hidden3d\n')
     handle.write('set palette rgb 33,13,10\n')
     handle.write('splot "-" using 1:2:3 notitle with lines \n')
-    for plot in spectrum.iteritems():
+    for plot in list(spectrum.items()):
         handle.write('\n')
-        for freq, pwr in plot[1].iteritems():
+        for freq, pwr in list(plot[1].items()):
             handle.write("{} {} {}\n".format(freq, plot[0], pwr))
 
 
@@ -529,7 +529,7 @@ def export_wwb(handle, spectrum):
     handle.write(freqs)
 
     i = 0
-    for sweep in spectrum.items():
+    for sweep in list(spectrum.items()):
         dataTime = datetime.datetime.utcfromtimestamp(sweep[0])
         dataSet = ('\t\t<data_set index="{}" freq_units="KHz" ampl_units="dBm" '
                    'start_freq="{}" stop_freq="{}" step_freq="{}" '
@@ -546,7 +546,7 @@ def export_wwb(handle, spectrum):
         i += 1
 
         values = ''
-        for scan in sweep[1].items():
+        for scan in list(sweep[1].items()):
             values += '\t\t\t<v>{:.1f}</v>\n'.format(scan[1])
         handle.write(values)
 
@@ -660,5 +660,5 @@ def extension_add(fileName, index, fileType):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

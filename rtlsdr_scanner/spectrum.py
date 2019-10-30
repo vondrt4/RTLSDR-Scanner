@@ -32,6 +32,7 @@ import numpy
 from rtlsdr_scanner.constants import WINFUNC
 from rtlsdr_scanner.misc import db_to_level, level_to_db
 from rtlsdr_scanner.utils_mpl import utc_to_mpl
+from functools import reduce
 
 
 class Extent(object):
@@ -55,7 +56,7 @@ class Extent(object):
         self.tMax = max(spectrum)
 
         for timeStamp in spectrum:
-            points = spectrum[timeStamp].items()
+            points = list(spectrum[timeStamp].items())
             if len(points) > 0:
                 fMin = min(points, key=itemgetter(0))[0]
                 fMax = max(points, key=itemgetter(0))[0]
@@ -66,7 +67,7 @@ class Extent(object):
                 self.lMin = min(self.lMin, lMin)
                 if(lMax >= self.lMax):
                     self.lMax = lMax
-                    self.fPeak, self.lPeak = max(points, key=lambda(_f, l): l)
+                    self.fPeak, self.lPeak = max(points, key=lambda _f_l: _f_l[1])
                     self.tPeak = timeStamp
 
     def get_f(self):
@@ -94,7 +95,7 @@ class Extent(object):
 
 
 class Measure(object):
-    MIN, MAX, AVG, GMEAN, HBW, OBW = range(6)
+    MIN, MAX, AVG, GMEAN, HBW, OBW = list(range(6))
 
     def __init__(self, spectrum, start, end):
         self.isValid = False
@@ -214,9 +215,9 @@ def reduce_points(spectrum, limit):
     newSpectrum = OrderedDict()
     ratio = float(total) / limit
     for timeStamp in spectrum:
-        points = spectrum[timeStamp].items()
+        points = list(spectrum[timeStamp].items())
         reduced = OrderedDict()
-        for i in xrange(int(len(points) / ratio)):
+        for i in range(int(len(points) / ratio)):
             point = points[int(i * ratio):int((i + 1) * ratio)][0]
             reduced[point[0]] = point[1]
         newSpectrum[timeStamp] = reduced
@@ -225,16 +226,16 @@ def reduce_points(spectrum, limit):
 
 
 def split_spectrum(spectrum):
-    freqs = spectrum.keys()
-    powers = map(spectrum.get, freqs)
+    freqs = list(spectrum.keys())
+    powers = list(map(spectrum.get, freqs))
 
     return freqs, powers
 
 
 def split_spectrum_sort(spectrum):
-    freqs = spectrum.keys()
+    freqs = list(spectrum.keys())
     freqs.sort()
-    powers = map(spectrum.get, freqs)
+    powers = list(map(spectrum.get, freqs))
 
     return freqs, powers
 
@@ -250,15 +251,15 @@ def slice_spectrum(spectrum, start, end):
     if min(sweep) > start or max(sweep) < end:
         length = len(spectrum)
         if length > 1:
-            sweep = spectrum.values()[length - 2]
+            sweep = list(spectrum.values())[length - 2]
         else:
             return None
 
     sweepTemp = {}
-    for f, p in sweep.iteritems():
+    for f, p in list(sweep.items()):
         if start <= f <= end:
             sweepTemp[f] = p
-    return sorted(sweepTemp.items(), key=lambda t: t[0])
+    return sorted(list(sweepTemp.items()), key=lambda t: t[0])
 
 
 def create_mesh(spectrum, mplTime):
@@ -302,9 +303,9 @@ def sort_spectrum(spectrum):
 
 def diff_spectrum(spectrum):
     data = OrderedDict()
-    for timeStamp, sweep in spectrum.items():
-        diff = numpy.diff(sweep.values())
-        data[timeStamp] = OrderedDict(zip(sweep.keys(), diff))
+    for timeStamp, sweep in list(spectrum.items()):
+        diff = numpy.diff(list(sweep.values()))
+        data[timeStamp] = OrderedDict(list(zip(list(sweep.keys()), diff)))
 
     return data
 
@@ -312,10 +313,10 @@ def diff_spectrum(spectrum):
 def delta_spectrum(spectrum):
     data = OrderedDict()
     if len(spectrum) > 1:
-        _t, baseline = spectrum.items()[0]
-        for timeStamp, sweep in spectrum.items()[1:]:
+        _t, baseline = list(spectrum.items())[0]
+        for timeStamp, sweep in list(spectrum.items())[1:]:
             delta = [(freq, sweep[freq] - baseline.get(freq, 0))
-                     for freq in sweep.keys()]
+                     for freq in list(sweep.keys())]
             data[timeStamp] = OrderedDict(delta)
     else:
         data = spectrum
@@ -325,7 +326,7 @@ def delta_spectrum(spectrum):
 
 def smooth_spectrum(spectrum, winFunc, ratio):
     data = OrderedDict()
-    for timeStamp, sweep in spectrum.items():
+    for timeStamp, sweep in list(spectrum.items()):
         if len(sweep):
             data[timeStamp] = smooth_sweep(sweep, winFunc, ratio)
 
@@ -340,27 +341,27 @@ def smooth_sweep(sweep, winFunc, ratio):
         length = 3
     window = function(length)
 
-    data = numpy.array([x[1] for x in sweep.items()])
+    data = numpy.array([x[1] for x in list(sweep.items())])
     series = numpy.r_[2 * data[0] - data[length - 1::-1],
                       data,
                       2 * data[-1] - data[-1:-length:-1]]
     levels = numpy.convolve(window / window.sum(), series, mode='same')
     smoothed = levels[length:-length + 1]
 
-    return OrderedDict(zip(sweep.keys(), smoothed))
+    return OrderedDict(list(zip(list(sweep.keys()), smoothed)))
 
 
 def get_peaks(spectrum, threshold):
     sweep = OrderedDict(spectrum[max(spectrum)])
-    for freq, level in sweep.items():
+    for freq, level in list(sweep.items()):
         if level < threshold:
             del sweep[freq]
 
-    indices = (numpy.diff(numpy.sign(numpy.diff(sweep.values()))) < 0).nonzero()[0] + 1
+    indices = (numpy.diff(numpy.sign(numpy.diff(list(sweep.values())))) < 0).nonzero()[0] + 1
 
     return sweep, indices
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

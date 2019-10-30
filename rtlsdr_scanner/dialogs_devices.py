@@ -23,9 +23,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import Queue
+import queue
 import copy
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from wx import grid
 import wx
@@ -42,7 +42,7 @@ from rtlsdr_scanner.misc import nearest, limit, get_serial_ports
 class DialogDevicesRTL(wx.Dialog):
     COLS = 10
     COL_SEL, COL_DEV, COL_TUN, COL_SER, COL_IND, \
-        COL_GAIN, COL_CAL, COL_LEVOFF, COL_LO, COL_OFF = range(COLS)
+        COL_GAIN, COL_CAL, COL_LEVOFF, COL_LO, COL_OFF = list(range(COLS))
 
     def __init__(self, parent, devices, settings):
         self.devices = copy.copy(devices)
@@ -124,7 +124,7 @@ class DialogDevicesRTL(wx.Dialog):
             self.gridDev.SetCellRenderer(i, self.COL_SEL,
                                          TickCellRenderer())
             if device.isDevice:
-                cell = grid.GridCellChoiceEditor(map(str, device.gains),
+                cell = grid.GridCellChoiceEditor(list(map(str, device.gains)),
                                                  allowOthers=False)
                 self.gridDev.SetCellEditor(i, self.COL_GAIN, cell)
             self.gridDev.SetCellEditor(i, self.COL_CAL,
@@ -273,7 +273,7 @@ class DialogDevicesRTL(wx.Dialog):
 
 
 class DialogDevicesGPS(wx.Dialog):
-    COL_SEL, COL_NAME, COL_TYPE, COL_HOST, COL_TEST = range(5)
+    COL_SEL, COL_NAME, COL_TYPE, COL_HOST, COL_TEST = list(range(5))
 
     def __init__(self, parent, settings):
         self.settings = settings
@@ -636,7 +636,7 @@ class DialogGPSTest(wx.Dialog):
 
         self.SetSizerAndFit(grid)
 
-        self.queue = Queue.Queue()
+        self.queue = queue.Queue()
         self.timer = wx.Timer(self)
         self.Bind(wx.EVT_TIMER, self.__on_timer, self.timer)
         self.timer.Start(self.POLL)
@@ -693,7 +693,7 @@ class DialogGPSTest(wx.Dialog):
                 self.textAlt.SetValue(text)
             elif status == Event.LOC_SAT:
                 self.satLevel.set_sats(loc)
-                used = sum(1 for sat in loc.values() if sat[1])
+                used = sum(1 for sat in list(loc.values()) if sat[1])
                 self.textSats.SetLabel('{}/{}'.format(used, len(loc)))
             elif status == Event.LOC_ERR:
                 self.__on_stop(None)
@@ -714,5 +714,5 @@ class DialogGPSTest(wx.Dialog):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

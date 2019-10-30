@@ -23,7 +23,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
+from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 import mimetypes
 import os
@@ -31,8 +31,8 @@ import select
 import socket
 import threading
 import time
-import urllib
-from urlparse import urlparse
+import urllib.request, urllib.parse, urllib.error
+from urllib.parse import urlparse
 
 import serial
 from serial.serialutil import SerialException
@@ -414,8 +414,8 @@ class LocationServerHandler(BaseHTTPRequestHandler):
         begin = format_iso_time(min(self.server.locations))
         end = format_iso_time(max(self.server.locations))
 
-        lat = [y for y, _x, _z in self.server.locations.itervalues()]
-        lon = [x for _y, x, _z in self.server.locations.itervalues()]
+        lat = [y for y, _x, _z in list(self.server.locations.values())]
+        lon = [x for _y, x, _z in list(self.server.locations.values())]
         latMin = min(lat)
         latMax = max(lat)
         lonMin = min(lon)
@@ -546,7 +546,7 @@ class LocationServerHandler(BaseHTTPRequestHandler):
 
         features = []
         with self.server.lock:
-            for location in self.server.locations.values():
+            for location in list(self.server.locations.values()):
                 geometry = {'type': 'Point',
                             'coordinates': location}
                 feature = {'type': 'Feature',
@@ -577,7 +577,7 @@ class LocationServerHandler(BaseHTTPRequestHandler):
                                 Log.WARN)
             return
 
-        urlFile = urllib.pathname2url(localFile)
+        urlFile = urllib.request.pathname2url(localFile)
         self.send_response(200)
         self.send_header('Content-type', mimetypes.guess_type(urlFile)[0])
         self.end_headers()
@@ -626,5 +626,5 @@ class Timeout(threading.Thread):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

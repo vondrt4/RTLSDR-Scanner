@@ -23,7 +23,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import ConfigParser
+import configparser
 
 import wx
 
@@ -258,7 +258,7 @@ class Settings(object):
         self.__load_devices_gps()
 
     def __check_conf_serial(self, device):
-        if device.type not in range(len(DeviceGPS.TYPE)):
+        if device.type not in list(range(len(DeviceGPS.TYPE))):
             return 'Type "{}" should be between 0 and {}'.format(device.type,
                                                                  len(DeviceGPS.TYPE) - 1)
 
@@ -277,7 +277,7 @@ class Settings(object):
                                                                    DeviceGPS.STOPS)
 
     def load_conf(self, filename):
-        config = ConfigParser.SafeConfigParser()
+        config = configparser.SafeConfigParser()
         try:
             config.read(filename)
             sections = config.sections()
@@ -301,7 +301,7 @@ class Settings(object):
                 self.devicesGps.append(device)
                 return self.__check_conf_serial(device)
 
-        except ConfigParser.Error as e:
+        except configparser.Error as e:
             return e.message
         except ValueError as e:
             return e.message
@@ -378,5 +378,5 @@ class Settings(object):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

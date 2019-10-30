@@ -26,7 +26,7 @@
 from collections import OrderedDict
 
 import wx
-from wx.grid import PyGridCellRenderer
+from wx.grid import GridCellRenderer
 
 
 class MultiButton(wx.PyControl):
@@ -34,8 +34,8 @@ class MultiButton(wx.PyControl):
     ARROW_SIZE = 6
 
     def __init__(self, parent, options, tips=None, selected=0):
-        wx.PyControl.__init__(self, parent=parent, size=wx.DefaultSize,
-                              style=wx.NO_BORDER)
+        wx.Control.__init__(self, parent=parent, size=wx.DefaultSize,
+                            style=wx.NO_BORDER)
         self.options = options
         self.tips = tips
         self.pressed = False
@@ -104,7 +104,7 @@ class MultiButton(wx.PyControl):
     def __set_text(self):
         self.SetLabel(self.options[self.selected])
         if self.tips is not None:
-            self.SetToolTipString(self.tips[self.selected])
+            self.SetToolTip(self.tips[self.selected])
         self.Refresh()
 
     def __is_over_arrow(self, event):
@@ -195,8 +195,8 @@ class Led(wx.PyControl):
         self.lit = False
         self.colour = wx.GREEN
 
-        wx.PyControl.__init__(self, parent=parent, id=id, size=wx.DefaultSize,
-                              style=wx.NO_BORDER)
+        wx.Control.__init__(self, parent=parent, id=id, size=wx.DefaultSize,
+                            style=wx.NO_BORDER)
 
         self.SetLabel(label)
 
@@ -309,7 +309,7 @@ class SatLevel(wx.PyControl):
             x = self.PADDING + (widthBar * i * 2.0)
 
             if self.sats is not None and i < len(self.sats):
-                sat = self.sats.items()[i]
+                sat = list(self.sats.items())[i]
                 prn = sat[0]
                 level = sat[1][0]
                 used = sat[1][1]
@@ -367,12 +367,12 @@ class SatLevel(wx.PyControl):
         self.Refresh()
 
 
-class TickCellRenderer(PyGridCellRenderer):
+class TickCellRenderer(GridCellRenderer):
     SIZE = 5
     PADDING = 3
 
     def __init__(self):
-        PyGridCellRenderer.__init__(self)
+        GridCellRenderer.__init__(self)
 
     def GetBestSize(self, _grid, _attr, _dc, _row, _col):
         return wx.Size(self.SIZE + self.PADDING, self.SIZE + self.PADDING)
@@ -401,7 +401,7 @@ class TickCellRenderer(PyGridCellRenderer):
             gc.StrokePath(pathTick)
 
 
-class CheckBoxCellRenderer(PyGridCellRenderer):
+class CheckBoxCellRenderer(GridCellRenderer):
     SIZE = 8
 
     def __init__(self, parent, showBox=True):
@@ -409,7 +409,7 @@ class CheckBoxCellRenderer(PyGridCellRenderer):
         self.showBox = showBox
         self.enabled = True
 
-        PyGridCellRenderer.__init__(self)
+        GridCellRenderer.__init__(self)
 
     def GetBestSize(self, _grid, _attr, _dc, _row, _col):
         return wx.Size(self.SIZE * 2, self.SIZE)
@@ -421,7 +421,7 @@ class CheckBoxCellRenderer(PyGridCellRenderer):
         if not self.enabled:
             flags |= wx.CONTROL_DISABLED
 
-        dc.DrawRectangleRect(rect)
+        dc.DrawRectangle(rect)
         renderer = wx.RendererNative.Get()
         renderer.DrawCheckBox(self.parent, dc, rect, flags)
 
@@ -453,9 +453,9 @@ class GridToolTips(object):
             else:
                 toolTip = ''
 
-            self.grid.GetGridWindow().SetToolTipString(toolTip)
+            self.grid.GetGridWindow().SetToolTip(toolTip)
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

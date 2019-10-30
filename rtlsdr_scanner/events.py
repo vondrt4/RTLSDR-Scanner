@@ -23,7 +23,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import Queue
+import queue
 import time
 
 import wx
@@ -36,7 +36,7 @@ class Event(object):
     STARTING, STEPS, INFO, DATA, STOPPED, ERROR, FINISHED, PROCESSED, \
         CAL, LEVEL, UPDATED, DRAW, \
         DELAY_COUNT, DELAY_START, \
-        LOC, LOC_RAW, LOC_WARN, LOC_ERR, LOC_SAT = range(19)
+        LOC, LOC_RAW, LOC_WARN, LOC_ERR, LOC_SAT = list(range(19))
 
 
 class Status(object):
@@ -89,7 +89,7 @@ class EventTimer(wx.Timer):
 class Log(object):
     MAX_ENTRIES = 50
 
-    INFO, WARN, ERROR = range(3)
+    INFO, WARN, ERROR = list(range(3))
     TEXT_LEVEL = ['Info', 'Warn', 'Error']
 
     def __init__(self):
@@ -117,12 +117,12 @@ class Log(object):
 
 
 def post_event(destination, status):
-    if isinstance(destination, Queue.Queue):
+    if isinstance(destination, queue.Queue):
         destination.put(status)
     elif isinstance(destination, wx.EvtHandler):
         wx.PostEvent(destination, status)
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

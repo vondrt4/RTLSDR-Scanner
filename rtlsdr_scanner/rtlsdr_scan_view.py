@@ -96,9 +96,9 @@ class MainWindow(wx.Frame):
 
         total = len(spectrum)
         count = 0.
-        for _time, sweep in spectrum.items():
+        for _time, sweep in list(spectrum.items()):
             alpha = (total - count) / total
-            vv.plot(sweep.keys(), sweep.values(), lw=1, alpha=alpha)
+            vv.plot(list(sweep.keys()), list(sweep.values()), lw=1, alpha=alpha)
             count += 1
 
 

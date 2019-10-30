@@ -23,8 +23,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import Queue
-import cPickle
+import queue
+import pickle
 import os
 
 from PIL import Image
@@ -329,7 +329,7 @@ class DialogExportSeq(wx.Dialog):
 
         wx.Dialog.__init__(self, parent=parent, title='Export Plot Sequence')
 
-        self.queue = Queue.Queue()
+        self.queue = queue.Queue()
         self.timer = wx.Timer(self)
         self.Bind(wx.EVT_TIMER, self.__on_timer, self.timer)
         self.timer.Start(self.POLL)
@@ -357,7 +357,7 @@ class DialogExportSeq(wx.Dialog):
 
         textRange = wx.StaticText(self, label='Range')
 
-        self.sweepTimeStamps = sorted([timeStamp for timeStamp in spectrum.keys()])
+        self.sweepTimeStamps = sorted([timeStamp for timeStamp in list(spectrum.keys())])
         sweepChoices = [format_time(timeStamp, True) for timeStamp in self.sweepTimeStamps]
 
         textStart = wx.StaticText(self, label="Start")
@@ -499,7 +499,7 @@ class DialogExportSeq(wx.Dialog):
 
         try:
             count = 1
-            for timeStamp, sweep in self.sweeps.items():
+            for timeStamp, sweep in list(self.sweeps.items()):
                 name = '{0:.0f}.png'.format(timeStamp)
                 directory = self.editDir.GetValue()
                 filename = os.path.join(directory, name)
@@ -523,7 +523,7 @@ class DialogExportSeq(wx.Dialog):
 
     def __spectrum_range(self, start, end):
         sweeps = {}
-        for timeStamp, sweep in self.spectrum.items():
+        for timeStamp, sweep in list(self.spectrum.items()):
             if start <= timeStamp <= end:
                 sweeps[timeStamp] = sweep
 
@@ -744,7 +744,7 @@ class DialogExportGeo(wx.Dialog):
         coords = {}
         for timeStamp in self.spectrum:
             spectrum = self.spectrum[timeStamp]
-            sweep = [yv for xv, yv in spectrum.items() if freqMin <= xv <= freqMax]
+            sweep = [yv for xv, yv in list(spectrum.items()) if freqMin <= xv <= freqMax]
             if len(sweep):
                 peak = max(sweep)
                 try:
@@ -762,7 +762,7 @@ class DialogExportGeo(wx.Dialog):
         y = []
         z = []
 
-        for coord, peak in coords.iteritems():
+        for coord, peak in list(coords.items()):
             x.append(coord[1])
             y.append(coord[0])
             z.append(peak)
@@ -954,7 +954,7 @@ class DialogSaveWarn(wx.Dialog):
 
 
 class DialogRestore(wx.Dialog):
-    COL_SEL, COL_TIME, COL_SIZE = range(3)
+    COL_SEL, COL_TIME, COL_SIZE = list(range(3))
 
     def __init__(self, parent, backups):
         self.selected = 0
@@ -1033,7 +1033,7 @@ class DialogRestore(wx.Dialog):
     def __on_restore(self, event):
         try:
             self.restored = self.backups.load(self.selected)
-        except (cPickle.UnpicklingError, AttributeError,
+        except (pickle.UnpicklingError, AttributeError,
                 EOFError, ImportError, IndexError, ValueError):
             wx.MessageBox('The file could not be restored', 'Restore failed',
                           wx.OK | wx.ICON_ERROR)
@@ -1071,5 +1071,5 @@ class DialogRestore(wx.Dialog):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

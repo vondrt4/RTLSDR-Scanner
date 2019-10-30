@@ -169,10 +169,10 @@ class DialogPreview(wx.Dialog):
 
         total = len(spectrum)
         count = 0.
-        for _time, sweep in spectrum.items():
+        for _time, sweep in list(spectrum.items()):
             if self.settings.fadeScans:
                 alpha = (count + 1) / total
-            vv.plot(sweep.keys(), sweep.values(), lw=1., alpha=alpha)
+            vv.plot(list(sweep.keys()), list(sweep.values()), lw=1., alpha=alpha)
             count += 1
 
     def set_title(self, title):
@@ -185,5 +185,5 @@ class DialogPreview(wx.Dialog):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

@@ -143,8 +143,8 @@ class ThreadPlot(threading.Thread):
         if total > 0:
             self.parent.clear_plots()
 
-            xs = [utc_to_mpl(x) for x in self.data.keys()]
-            ys = [len(sweep) for sweep in self.data.values()]
+            xs = [utc_to_mpl(x) for x in list(self.data.keys())]
+            ys = [len(sweep) for sweep in list(self.data.values())]
 
             self.parent.plot = self.axes.plot(xs, ys, 'bo', gid='plot')
 
@@ -156,5 +156,5 @@ class ThreadPlot(threading.Thread):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

@@ -136,7 +136,7 @@ class DialogOffset(wx.Dialog):
                                             window=function(1024))
 
         plot = []
-        for x, y in itertools.izip(freqs, powers):
+        for x, y in zip(freqs, powers):
             plot.append((x, y))
         plot.sort()
         x, y = numpy.transpose(plot)
@@ -555,5 +555,5 @@ class DialogWinFunc(wx.Dialog):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

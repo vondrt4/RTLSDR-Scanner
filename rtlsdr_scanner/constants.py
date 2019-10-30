@@ -75,19 +75,19 @@ WINFUNC = ["Bartlett", numpy.bartlett,
 
 
 class Warn(object):
-    SCAN, OPEN, EXIT, NEW, MERGE = range(5)
+    SCAN, OPEN, EXIT, NEW, MERGE = list(range(5))
 
 
 class Cal(object):
-    START, DONE, OK, CANCEL = range(4)
+    START, DONE, OK, CANCEL = list(range(4))
 
 
 class Display(object):
-    PLOT, SPECT, SURFACE, STATUS, TIMELINE, PREVIEW = range(6)
+    PLOT, SPECT, SURFACE, STATUS, TIMELINE, PREVIEW = list(range(6))
 
 
 class Mode(object):
-    SINGLE, CONTIN, MAX = range(3)
+    SINGLE, CONTIN, MAX = list(range(3))
 
 
 class Plot(object):
@@ -96,15 +96,15 @@ class Plot(object):
 
 
 class PlotFunc(object):
-    NONE, AVG, MIN, MAX, VAR, SMOOTH, DIFF, DELTA = range(8)
+    NONE, AVG, MIN, MAX, VAR, SMOOTH, DIFF, DELTA = list(range(8))
 
 
 class Markers(object):
     MIN, MAX, AVG, GMEAN, \
         HP, HFS, HFE, \
-        OP, OFS, OFE = range(10)
+        OP, OFS, OFE = list(range(10))
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

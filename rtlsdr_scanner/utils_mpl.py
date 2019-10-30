@@ -75,7 +75,7 @@ def find_artists(figure, gid):
 
 
 def set_table_colour(table, colour):
-    for _loc, cell in table.get_celld().items():
+    for _loc, cell in list(table.get_celld().items()):
         cell.set_edgecolor(colour)
 
 
@@ -134,5 +134,5 @@ def create_heatmap(xs, ys, imageSize, blobSize, cmap):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

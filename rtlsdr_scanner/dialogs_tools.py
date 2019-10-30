@@ -23,7 +23,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import Queue
+import queue
 import copy
 import textwrap
 
@@ -210,7 +210,7 @@ class DialogSmooth(wx.Dialog):
                            style=wx.RESIZE_BORDER | wx.CAPTION | wx.SYSTEM_MENU |
                            wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX | wx.CLOSE_BOX)
 
-        self.queue = Queue.Queue()
+        self.queue = queue.Queue()
         self.timer = wx.Timer(self)
         self.Bind(wx.EVT_TIMER, self.__on_timer, self.timer)
         self.timer.Start(self.POLL)
@@ -408,7 +408,7 @@ class DialogSats(wx.Dialog):
 
     def set_sats(self, sats):
         self.satLevel.set_sats(sats)
-        used = sum(1 for sat in sats.values() if sat[1])
+        used = sum(1 for sat in list(sats.values()) if sat[1])
         self.__set_text(used, len(sats))
 
 
@@ -509,5 +509,5 @@ class DialogLog(wx.Dialog):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

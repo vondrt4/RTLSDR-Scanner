@@ -31,7 +31,7 @@ import matplotlib
 from matplotlib.backend_bases import NavigationToolbar2
 from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg
 import wx
-from wx.animate import AnimationCtrl, Animation
+from wx.adv import AnimationCtrl, Animation
 
 from rtlsdr_scanner.constants import Display, PlotFunc
 from rtlsdr_scanner.dialogs_toolbars import DialogSmoothPrefs, DialogPeakThreshold
@@ -64,7 +64,7 @@ class Statusbar(wx.StatusBar):
                                     style=wx.GA_HORIZONTAL | wx.GA_SMOOTH)
         animation = Animation(get_resource('busy.gif'))
         busy = AnimationCtrl(self, anim=animation)
-        busy.SetToolTipString('Updating plot')
+        busy.SetToolTip('Updating plot')
         self.controls[4] = busy
 
         self.controls[3].Hide()
@@ -91,28 +91,28 @@ class Statusbar(wx.StatusBar):
     def __format_tooltip(self, text):
         if len(text):
             lines = text.splitlines()
-            width = max(map(len, lines))
+            width = max(list(map(len, lines)))
             lines[-1] += '\n' + ' ' * (width - len(lines[-1]))
         return text
 
     def set_general(self, text, level=Log.INFO):
         text = self.TEXT_GENERAL + text
         self.controls[0].SetLabel(text)
-        self.controls[0].SetToolTipString(self.__format_tooltip(text))
+        self.controls[0].SetToolTip(self.__format_tooltip(text))
         self.controls[0].Refresh()
         self.log.add(text, level)
 
     def set_info(self, text, level=Log.INFO):
         text = self.TEXT_INFO + text
         self.controls[1].SetLabel(text)
-        self.controls[1].SetToolTipString(self.__format_tooltip(text))
+        self.controls[1].SetToolTip(self.__format_tooltip(text))
         self.controls[1].Refresh()
         self.log.add(text, level)
 
     def set_gps(self, text, level=Log.INFO):
         text = self.TEXT_GPS + text
         self.controls[2].SetLabel(text)
-        self.controls[2].SetToolTipString(self.__format_tooltip(text))
+        self.controls[2].SetToolTip(self.__format_tooltip(text))
         self.controls[2].Refresh()
         self.log.add(text, level)
 
@@ -183,17 +183,19 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
         self.__add_spacer(False)
 
         liveId = wx.NewId()
-        self.AddCheckTool(liveId, load_bitmap('auto_refresh'),
+        self.AddCheckTool(liveId, 'auto_refresh', load_bitmap('auto_refresh'),
                           shortHelp='Real time plotting\n(slow and buggy)')
         self.ToggleTool(liveId, settings.liveUpdate)
-        wx.EVT_TOOL(self, liveId, self.__on_check_update)
-
+        # wx.EVT_TOOL(self, liveId, self.__on_check_update)
+        self.Bind(wx.EVT_TOOL, self.__on_check_update, id=liveId)
+        
         gridId = wx.NewId()
-        self.AddCheckTool(gridId, load_bitmap('grid'),
+        self.AddCheckTool(gridId, 'grid', load_bitmap('grid'),
                           shortHelp='Toggle plot_line grid')
         self.ToggleTool(gridId, settings.grid)
-        wx.EVT_TOOL(self, gridId, self.__on_check_grid)
-
+        # wx.EVT_TOOL(self, gridId, self.__on_check_grid)
+        self.Bind( wx.EVT_TOOL, self.__on_check_grid, id=gridId)
+        
         self.peakId = wx.NewId()
         self.peaksId = None
 
@@ -374,15 +376,17 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
     def __add_check_tool(self, bitmap, toolTip, callback, setting=None, toolId=None):
         if toolId is None:
             toolId = wx.NewId()
-        self.AddCheckTool(toolId, load_bitmap(bitmap), shortHelp=toolTip)
-        wx.EVT_TOOL(self, toolId, callback)
+        self.AddCheckTool(toolId, 'toolTip', load_bitmap(bitmap), shortHelp=toolTip)
+        # wx.EVT_TOOL(self, toolId, callback)
+        self.Bind(wx.EVT_TOOL, callback, id=toolId)
+        
         if setting is not None:
             self.ToggleTool(toolId, setting)
         self.extraTools.append(toolId)
 
     def __add_spacer(self, temp=True):
         sepId = wx.NewId()
-        self.AddCheckTool(sepId, load_bitmap('spacer'))
+        self.AddCheckTool(sepId, '', load_bitmap('spacer'))
         self.EnableTool(sepId, False)
         if temp:
             self.extraTools.append(sepId)
@@ -400,8 +404,9 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
                               self.__on_check_peaks,
                               self.settings.peaks,
                               toolId=self.peaksId)
-        wx.EVT_TOOL_RCLICKED(self, self.peaksId, self.__on_set_peaks)
-
+        #        wx.EVT_TOOL_RCLICKED(self, self.peaksId, self.__on_set_peaks)
+        self.Bind(wx.EVT_TOOL_RCLICKED, self.__on_set_peaks, id=self.peaksId)
+            
     def __add_auto_range(self, scaleF, scaleL, scaleT):
         if scaleF:
             self.autoFId = wx.NewId()
@@ -527,7 +532,8 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
             self.__add_check_tool('smooth', 'Smooth (right click for options)',
                                   self.__on_check_smooth,
                                   toolId=self.smoothId)
-            wx.EVT_TOOL_RCLICKED(self, self.smoothId, self.__on_set_smooth)
+            # wx.EVT_TOOL_RCLICKED(self, self.smoothId, self.__on_set_smooth)
+            self.Bind(wx.EVT_TOOL_RCLICKED, self.__on_set_smooth, id=self.smoothId)
             self.diffId = wx.NewId()
             self.__add_check_tool('diff', 'Differentiate spectrum',
                                   self.__on_check_diff,
@@ -611,5 +617,5 @@ class NavigationToolbarCompare(NavigationToolbar2WxAgg):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

@@ -279,7 +279,7 @@ class ThreadPlot(threading.Thread):
         lastTime = utc_to_mpl(max(self.data))
 
         for i in indices:
-            self.axes.plot([sweep.keys()[i]], [lastTime], [sweep.values()[i]],
+            self.axes.plot([list(sweep.keys())[i]], [lastTime], [list(sweep.values())[i]],
                            linestyle='None',
                            marker='+', markersize=10, color='r',
                            gid='peakThres')
@@ -294,5 +294,5 @@ class ThreadPlot(threading.Thread):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

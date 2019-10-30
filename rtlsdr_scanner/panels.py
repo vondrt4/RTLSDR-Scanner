@@ -179,7 +179,7 @@ class PanelGraph(wx.Panel):
             if timeStamp in self.spectrum:
                 spectrum = self.spectrum[timeStamp]
             else:
-                nearest = min(self.spectrum.keys(),
+                nearest = min(list(self.spectrum.keys()),
                               key=lambda k: abs(k - timeStamp))
                 spectrum = self.spectrum[nearest]
         elif self.settings.display == Display.SURFACE:
@@ -197,8 +197,8 @@ class PanelGraph(wx.Panel):
             spectrum = None
 
         if spectrum is not None and len(spectrum) > 0:
-            x = min(spectrum.keys(), key=lambda freq: abs(freq - xpos))
-            if min(spectrum.keys(), key=float) <= xpos <= max(spectrum.keys(),
+            x = min(list(spectrum.keys()), key=lambda freq: abs(freq - xpos))
+            if min(list(spectrum.keys()), key=float) <= xpos <= max(list(spectrum.keys()),
                                                               key=float):
                 y = spectrum[x]
                 text = "{}, {}".format(*format_precision(self.settings, x, y))
@@ -520,17 +520,17 @@ class PanelGraphCompare(wx.Panel):
         locs = dict.fromkeys(['x1', 'y1', 'x2', 'y2', 'x3', 'y3'], None)
 
         if self.spectrum1 is not None and len(self.spectrum1) > 0:
-            locs['x1'] = min(self.spectrum1.keys(),
+            locs['x1'] = min(list(self.spectrum1.keys()),
                              key=lambda freq: abs(freq - xpos))
             locs['y1'] = self.spectrum1[locs['x1']]
 
         if self.spectrum2 is not None and len(self.spectrum2) > 0:
-            locs['x2'] = min(self.spectrum2.keys(),
+            locs['x2'] = min(list(self.spectrum2.keys()),
                              key=lambda freq: abs(freq - xpos))
             locs['y2'] = self.spectrum2[locs['x2']]
 
         if self.spectrumDiff is not None and len(self.spectrumDiff) > 0:
-            locs['x3'] = min(self.spectrumDiff.keys(),
+            locs['x3'] = min(list(self.spectrumDiff.keys()),
                              key=lambda freq: abs(freq - xpos))
             locs['y3'] = self.spectrumDiff[locs['x3']]
 
@@ -696,7 +696,7 @@ class PanelMeasure(wx.Panel):
         self.grid.SetColSize(7, 1)
         self.grid.SetColSize(11, 1)
         self.grid.SetColSize(15, 1)
-        self.grid.SetMargins(0, wx.SystemSettings_GetMetric(wx.SYS_HSCROLL_Y))
+        self.grid.SetMargins(0, wx.SystemSettings.GetMetric(wx.SYS_HSCROLL_Y))
 
         for x in range(self.grid.GetNumberRows()):
             self.grid.SetRowLabelValue(x, '')
@@ -760,17 +760,17 @@ class PanelMeasure(wx.Panel):
         dc.SetFont(font)
         widthMHz = dc.GetTextExtent('###.######')[0] * 1.2
         widthdB = dc.GetTextExtent('-##.##')[0] * 1.2
-        for _desc, (_row, col) in self.locsDesc.iteritems():
+        for _desc, (_row, col) in list(self.locsDesc.items()):
             self.grid.AutoSizeColumn(col)
         for col in [1, 5, 14, 18]:
             self.grid.SetColSize(col, widthMHz)
-            for row in xrange(self.grid.GetNumberRows()):
+            for row in range(self.grid.GetNumberRows()):
                 self.grid.SetCellFont(row, col, font)
         for col in [6, 10]:
             self.grid.SetColSize(col, widthdB)
-            for row in xrange(self.grid.GetNumberRows()):
+            for row in range(self.grid.GetNumberRows()):
                 self.grid.SetCellFont(row, col, font)
-        for _desc, (_row, col) in self.locsCheck.iteritems():
+        for _desc, (_row, col) in list(self.locsCheck.items()):
             self.grid.AutoSizeColumn(col)
 
         toolTips = {}
@@ -814,12 +814,12 @@ class PanelMeasure(wx.Panel):
         font = self.grid.GetCellFont(0, 0)
         font.SetWeight(wx.BOLD)
 
-        for desc, (row, col) in self.locsDesc.iteritems():
+        for desc, (row, col) in list(self.locsDesc.items()):
             self.grid.SetCellValue(row, col, desc)
             self.grid.SetCellFont(row, col, font)
 
     def __set_check_editor(self):
-        for _desc, (row, col) in self.locsCheck.iteritems():
+        for _desc, (row, col) in list(self.locsCheck.items()):
             self.grid.SetCellEditor(row, col, wxGrid.GridCellBoolEditor())
             self.grid.SetCellAlignment(row, col, wx.ALIGN_RIGHT, wx.ALIGN_CENTRE)
             self.grid.SetCellRenderer(row, col, CheckBoxCellRenderer(self))
@@ -870,7 +870,7 @@ class PanelMeasure(wx.Panel):
         row = event.GetRow()
         col = event.GetCol()
 
-        if (row, col) in self.locsCheck.values():
+        if (row, col) in list(self.locsCheck.values()):
             if self.grid.GetCellRenderer(row, col).enabled and self.measure is not None:
                 check = self.grid.GetCellValue(row, col)
                 if check == '1':
@@ -879,7 +879,7 @@ class PanelMeasure(wx.Panel):
                     check = '1'
                 self.grid.SetCellValue(row, col, check)
 
-                for control, (r, c) in self.locsCheck.iteritems():
+                for control, (r, c) in list(self.locsCheck.items()):
                     if (r, c) == (row, col):
                         self.checked[control] = check
 
@@ -889,7 +889,7 @@ class PanelMeasure(wx.Panel):
                     col = self.selected[1]
                     self.grid.SetGridCursor(row, col)
                 self.update_measure()
-        elif (row, col) in self.locsMeasure.itervalues():
+        elif (row, col) in iter(list(self.locsMeasure.values())):
             self.selected = (row, col)
             self.grid.SetGridCursor(row, col)
         elif self.selected is None:
@@ -1076,5 +1076,5 @@ class PanelMeasure(wx.Panel):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)

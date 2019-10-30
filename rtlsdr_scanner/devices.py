@@ -29,7 +29,7 @@ import serial
 
 
 class DeviceGPS(object):
-    NMEA_SERIAL, GPSD, GPSD_OLD, NMEA_TCP = range(4)
+    NMEA_SERIAL, GPSD, GPSD_OLD, NMEA_TCP = list(range(4))
     TYPE = ['NMEA (Serial)', 'GPSd', 'GPSd (Legacy)', 'NMEA (Server)']
     BYTES = [serial.FIVEBITS, serial.SIXBITS, serial.SEVENBITS,
              serial.EIGHTBITS]
@@ -155,5 +155,5 @@ def format_device_rtl_name(name):
 
 
 if __name__ == '__main__':
-    print 'Please run rtlsdr_scan.py'
+    print('Please run rtlsdr_scan.py')
     exit(1)
