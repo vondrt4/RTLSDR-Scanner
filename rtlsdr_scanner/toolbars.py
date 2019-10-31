@@ -248,47 +248,47 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
         self.clear_auto()
 
     def __on_check_auto_f(self, event):
-        self.settings.autoF = event.Checked()
+        self.settings.autoF = event.IsChecked()
         self.panel.redraw_plot()
 
     def __on_check_auto_l(self, event):
-        self.settings.autoL = event.Checked()
+        self.settings.autoL = event.IsChecked()
         self.panel.redraw_plot()
 
     def __on_check_auto_t(self, event):
-        self.settings.autoT = event.Checked()
+        self.settings.autoT = event.IsChecked()
         self.panel.redraw_plot()
 
     def __on_check_update(self, event):
-        self.settings.liveUpdate = event.Checked()
+        self.settings.liveUpdate = event.IsChecked()
 
     def __on_check_grid(self, event):
-        grid = event.Checked()
+        grid = event.IsChecked()
         self.settings.grid = grid
         self.panel.set_grid(grid)
 
     def __on_check_peak(self, event):
-        peak = event.Checked()
+        peak = event.IsChecked()
         self.settings.annotate = peak
         self.panel.redraw_plot()
 
     def __on_check_peaks(self, event):
-        peaks = event.Checked()
+        peaks = event.IsChecked()
         self.settings.peaks = peaks
         self.panel.redraw_plot()
 
     def __on_check_fade(self, event):
-        fade = event.Checked()
+        fade = event.IsChecked()
         self.settings.fadeScans = fade
         self.panel.redraw_plot()
 
     def __on_check_wire(self, event):
-        wire = event.Checked()
+        wire = event.IsChecked()
         self.settings.wireframe = wire
         self.panel.create_plot()
 
     def __on_check_avg(self, event):
-        check = event.Checked()
+        check = event.IsChecked()
         if check:
             self.settings.plotFunc = PlotFunc.AVG
         else:
@@ -297,7 +297,7 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
         self.panel.redraw_plot()
 
     def __on_check_min(self, event):
-        check = event.Checked()
+        check = event.IsChecked()
         if check:
             self.settings.plotFunc = PlotFunc.MIN
         else:
@@ -306,7 +306,7 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
         self.panel.redraw_plot()
 
     def __on_check_max(self, event):
-        check = event.Checked()
+        check = event.IsChecked()
         if check:
             self.settings.plotFunc = PlotFunc.MAX
         else:
@@ -315,7 +315,7 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
         self.panel.redraw_plot()
 
     def __on_check_var(self, event):
-        check = event.Checked()
+        check = event.IsChecked()
         if check:
             self.settings.plotFunc = PlotFunc.VAR
         else:
@@ -324,7 +324,7 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
         self.panel.redraw_plot()
 
     def __on_check_smooth(self, event):
-        check = event.Checked()
+        check = event.IsChecked()
         if check:
             self.settings.plotFunc = PlotFunc.SMOOTH
         else:
@@ -333,7 +333,7 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
         self.panel.redraw_plot()
 
     def __on_check_diff(self, event):
-        check = event.Checked()
+        check = event.IsChecked()
         if check:
             self.settings.plotFunc = PlotFunc.DIFF
         else:
@@ -342,7 +342,7 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
         self.panel.redraw_plot()
 
     def __on_check_delta(self, event):
-        check = event.Checked()
+        check = event.IsChecked()
         if check:
             self.settings.plotFunc = PlotFunc.DELTA
         else:
@@ -367,7 +367,7 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
         self.panel.redraw_plot()
 
     def __on_colour_use(self, event):
-        check = event.IsChecked()
+        check = event.IsIsChecked()
         self.settings.colourMapUse = check
         self.colourId.Enable(check)
         self.plot.set_colourmap_use(check)
@@ -612,7 +612,7 @@ class NavigationToolbarCompare(NavigationToolbar2WxAgg):
         self.Bind(wx.EVT_TOOL, self.__on_check_grid, id=gridId)
 
     def __on_check_grid(self, event):
-        grid = event.Checked()
+        grid = event.IsChecked()
         self.panel.set_grid(grid)
 
     def clear_auto(self):

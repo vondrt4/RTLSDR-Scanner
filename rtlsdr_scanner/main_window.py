@@ -733,7 +733,7 @@ class FrameMain(wx.Frame):
         self.graph.clear_selection()
 
     def __on_show_measure(self, event):
-        show = event.Checked()
+        show = event.IsChecked()
         self.menuMain.showMeasure.Check(show)
         self.menuPopup.showMeasure.Check(show)
         self.settings.showMeasure = show

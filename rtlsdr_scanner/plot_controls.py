@@ -61,29 +61,30 @@ class MouseZoom():
         if self.callbackHide is not None:
             self.callbackHide()
         self.toolbar.clear_auto()
-
-        if self.toolbar._views.empty():
-            self.toolbar.push_current()
-
+        # if self.toolbar._views.empty(): removed in 3.0
+        # self.toolbar.push_current()
+        self.toolbar.update()
+        
         xLim = self.axes.get_xlim()
         yLim = self.axes.get_ylim()
         xPos = event.xdata
         yPos = event.ydata
-        if not yLim[0] <= yPos <= yLim[1]:
-            yPos = yLim[0] + (yLim[1] - yLim[0]) / 2
+        if yPos is not None:
+            if not yLim[0] <= yPos <= yLim[1]:
+                yPos = yLim[0] + (yLim[1] - yLim[0]) / 2
 
-        xPosRel = (xLim[1] - xPos) / (xLim[1] - xLim[0])
-        yPosRel = (yLim[1] - yPos) / (yLim[1] - yLim[0])
+            xPosRel = (xLim[1] - xPos) / (xLim[1] - xLim[0])
+            yPosRel = (yLim[1] - yPos) / (yLim[1] - yLim[0])
 
-        newXLim = (xLim[1] - xLim[0]) * scale
-        newYLim = (yLim[1] - yLim[0]) * scale
-        xStart = xPos - newXLim * (1 - xPosRel)
-        xStop = xPos + newXLim * xPosRel
-        yStart = yPos - newYLim * (1 - yPosRel)
-        yStop = yPos + newYLim * yPosRel
+            newXLim = (xLim[1] - xLim[0]) * scale
+            newYLim = (yLim[1] - yLim[0]) * scale
+            xStart = xPos - newXLim * (1 - xPosRel)
+            xStop = xPos + newXLim * xPosRel
+            yStart = yPos - newYLim * (1 - yPosRel)
+            yStop = yPos + newYLim * yPosRel
 
-        self.axes.set_xlim([xStart, xStop])
-        self.axes.set_ylim([yStart, yStop])
+            self.axes.set_xlim([xStart, xStop])
+            self.axes.set_ylim([yStart, yStop])
 
         self.toolbar.push_current()
         self.figure.canvas.draw()
