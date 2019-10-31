@@ -431,14 +431,14 @@ class DialogLog(wx.Dialog):
         self.choiceFilter = wx.Choice(self,
                                       choices=['All'] + self.log.TEXT_LEVEL)
         self.choiceFilter.SetSelection(0)
-        self.choiceFilter.SetToolTipString('Filter log level')
+        self.choiceFilter.SetToolTip('Filter log level')
         self.Bind(wx.EVT_CHOICE, self.__on_filter, self.choiceFilter)
         sizerFilter = wx.BoxSizer()
         sizerFilter.Add(textFilter, flag=wx.ALL, border=5)
         sizerFilter.Add(self.choiceFilter, flag=wx.ALL, border=5)
 
         buttonRefresh = wx.Button(self, wx.ID_ANY, label='Refresh')
-        buttonRefresh.SetToolTipString('Refresh the log')
+        buttonRefresh.SetToolTip('Refresh the log')
         buttonClose = wx.Button(self, wx.ID_CLOSE)
         self.Bind(wx.EVT_BUTTON, self.__on_refresh, buttonRefresh)
         self.Bind(wx.EVT_BUTTON, self.__on_close, buttonClose)

@@ -284,12 +284,12 @@ class DialogDevicesGPS(wx.Dialog):
         wx.Dialog.__init__(self, parent=parent, title="GPS")
 
         self.checkGps = wx.CheckBox(self, wx.ID_ANY, "Enable GPS")
-        self.checkGps.SetToolTipString('Record GPS locations in scans')
+        self.checkGps.SetToolTip('Record GPS locations in scans')
         self.checkGps.SetValue(settings.gps)
         self.Bind(wx.EVT_CHECKBOX, self.__on_check, self.checkGps)
 
         self.checkGpsRetry = wx.CheckBox(self, wx.ID_ANY, "Retry after disconnection")
-        self.checkGpsRetry.SetToolTipString('Retry GPS if disconnected')
+        self.checkGpsRetry.SetToolTip('Retry GPS if disconnected')
         self.checkGpsRetry.SetValue(settings.gpsRetry)
         self.checkGpsRetry.Enable(settings.gps)
 

@@ -52,7 +52,7 @@ class Plotter(object):
         self.figure = figure
         self.settings = settings
         self.axes = None
-        self.bar = None
+        # self.bar = None
         self.barBase = None
         self.threadPlot = None
         self.extent = None
@@ -83,13 +83,12 @@ class Plotter(object):
         self.axes.set_xlim(self.settings.start, self.settings.stop)
         self.axes.set_ylim(-50, 0)
 
-        self.bar = self.figure.add_subplot(gs[1])
+        self.bar_ax = self.figure.add_subplot(gs[1])
         norm = Normalize(vmin=-50, vmax=0)
         
         self.scalarMap = ScalarMappable(norm=norm)
-        # self.barBase = ColorbarBase(self.bar, norm=norm)
-        self.barBase = self.figure.colorbar(self.scalarMap, ax=self.bar)
-        # self.barBase = self.toto
+        # self.barBase = ColorbarBase(self.bar_ax, norm=norm)
+        self.barBase = self.figure.colorbar(self.scalarMap, cax=self.bar_ax)
         self.set_colourmap_use(self.settings.colourMapUse)
 
         self.__setup_measure()
@@ -385,10 +384,10 @@ class Plotter(object):
     def set_axes(self, on):
         if on:
             self.axes.set_axis_on()
-            self.bar.set_axis_on()
+            self.bar_ax.set_axis_on()
         else:
             self.axes.set_axis_off()
-            self.bar.set_axis_off()
+            self.bar_ax.set_axis_off()
 
     def set_colourmap_use(self, on):
         self.set_bar(on)

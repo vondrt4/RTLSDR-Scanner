@@ -267,8 +267,8 @@ class SatLevel(wx.PyControl):
     PADDING = 5
 
     def __init__(self, parent, id=wx.ID_ANY, barCount=16):
-        wx.PyControl.__init__(self, parent=parent, id=id, size=wx.DefaultSize,
-                              style=wx.NO_BORDER)
+        wx.Control.__init__(self, parent=parent, id=id, size=wx.DefaultSize,
+                            style=wx.NO_BORDER)
 
         self.barCount = barCount
         self.sats = None

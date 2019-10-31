@@ -194,7 +194,7 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
                           shortHelp='Toggle plot_line grid')
         self.ToggleTool(gridId, settings.grid)
         # wx.EVT_TOOL(self, gridId, self.__on_check_grid)
-        self.Bind( wx.EVT_TOOL, self.__on_check_grid, id=gridId)
+        self.Bind(wx.EVT_TOOL, self.__on_check_grid, id=gridId)
         
         self.peakId = wx.NewId()
         self.peaksId = None
@@ -367,7 +367,7 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
         self.panel.redraw_plot()
 
     def __on_colour_use(self, event):
-        check = event.Checked()
+        check = event.IsChecked()
         self.settings.colourMapUse = check
         self.colourId.Enable(check)
         self.plot.set_colourmap_use(check)
@@ -554,7 +554,8 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
             self.__add_check_tool('smooth', 'Smooth (right click for options)',
                                   self.__on_check_smooth,
                                   toolId=self.smoothId)
-            wx.EVT_TOOL_RCLICKED(self, self.smoothId, self.__on_set_smooth)
+            # wx.EVT_TOOL_RCLICKED(self, self.smoothId, self.__on_set_smooth)
+            self.Bind(wx.EVT_TOOL_RCLICKED, self.__on_set_smooth, id=self.smoothId)
             self.diffId = wx.NewId()
             self.__add_check_tool('diff', 'Differentiate spectrum',
                                   self.__on_check_diff,
@@ -570,7 +571,8 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
             self.__add_check_tool('smooth', 'Smooth (right click for options)',
                                   self.__on_check_smooth,
                                   toolId=self.smoothId)
-            wx.EVT_TOOL_RCLICKED(self, self.smoothId, self.__on_set_smooth)
+            # wx.EVT_TOOL_RCLICKED(self, self.smoothId, self.__on_set_smooth)
+            self.Bind(wx.EVT_TOOL_RCLICKED, self.__on_set_smooth, id=self.smoothId)
             self.diffId = wx.NewId()
             self.__add_check_tool('diff', 'Differentiate spectrum',
                                   self.__on_check_diff,
@@ -603,10 +605,11 @@ class NavigationToolbarCompare(NavigationToolbar2WxAgg):
         self.AddSeparator()
 
         gridId = wx.NewId()
-        self.AddCheckTool(gridId, load_bitmap('grid'),
+        self.AddCheckTool(gridId, 'grid', load_bitmap('grid'),
                           shortHelp='Toggle grid')
         self.ToggleTool(gridId, True)
-        wx.EVT_TOOL(self, gridId, self.__on_check_grid)
+        # wx.EVT_TOOL(self, gridId, self.__on_check_grid)
+        self.Bind(wx.EVT_TOOL, self.__on_check_grid, id=gridId)
 
     def __on_check_grid(self, event):
         grid = event.Checked()

@@ -38,7 +38,7 @@ def create_gearth(handle):
                  '\t\t\t<refreshInterval>10</refreshInterval>\n'
                  '\t\t</Link>\n'
                  '\t</NetworkLink>\n'
-                 '</kml>\n'.format(APP_NAME, LOCATION_PORT))
+                 '</kml>\n'.format(APP_NAME, LOCATION_PORT).encode())
 
 
 if __name__ == '__main__':

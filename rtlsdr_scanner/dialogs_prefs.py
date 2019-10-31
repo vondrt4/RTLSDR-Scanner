@@ -31,6 +31,7 @@ import numpy
 import rtlsdr
 import wx
 from wx.lib.agw.cubecolourdialog import CubeColourDialog
+from wx.adv import HyperlinkCtrl
 from wx.lib.masked.numctrl import NumCtrl
 
 from rtlsdr_scanner.constants import F_MIN, F_MAX, SAMPLE_RATE, BANDWIDTH, WINFUNC
@@ -215,16 +216,16 @@ class DialogPrefs(wx.Dialog):
         self.checkBackup = wx.CheckBox(self, wx.ID_ANY,
                                        "Backup")
         self.checkBackup.SetValue(settings.backup)
-        self.checkBackup.SetToolTipString('Backup data after crash')
+        self.checkBackup.SetToolTip('Backup data after crash')
         self.checkAlert = wx.CheckBox(self, wx.ID_ANY,
                                       "Level alert (dB)")
         self.checkAlert.SetValue(settings.alert)
-        self.checkAlert.SetToolTipString('Play alert when level exceeded')
+        self.checkAlert.SetToolTip('Play alert when level exceeded')
         self.Bind(wx.EVT_CHECKBOX, self.__on_alert, self.checkAlert)
         self.spinLevel = wx.SpinCtrl(self, wx.ID_ANY, min=-100, max=20)
         self.spinLevel.SetValue(settings.alertLevel)
         self.spinLevel.Enable(settings.alert)
-        self.spinLevel.SetToolTipString('Alert threshold')
+        self.spinLevel.SetToolTip('Alert threshold')
         textBackground = wx.StaticText(self, label='Background colour')
         self.buttonBackground = wx.Button(self, wx.ID_ANY)
         self.buttonBackground.SetBackgroundColour(self.background)
@@ -237,31 +238,31 @@ class DialogPrefs(wx.Dialog):
         self.checkPoints = wx.CheckBox(self, wx.ID_ANY,
                                        "Limit points")
         self.checkPoints.SetValue(settings.pointsLimit)
-        self.checkPoints.SetToolTipString('Limit the resolution of plots')
+        self.checkPoints.SetToolTip('Limit the resolution of plots')
         self.Bind(wx.EVT_CHECKBOX, self.__on_points, self.checkPoints)
         self.spinPoints = wx.SpinCtrl(self, wx.ID_ANY, min=1000, max=100000)
         self.spinPoints.Enable(settings.pointsLimit)
         self.spinPoints.SetValue(settings.pointsMax)
-        self.spinPoints.SetToolTipString('Maximum number of points to plot_line')
+        self.spinPoints.SetToolTip('Maximum number of points to plot_line')
         textDpi = wx.StaticText(self, label='Export DPI')
         self.spinDpi = wx.SpinCtrl(self, wx.ID_ANY, min=72, max=6000)
         self.spinDpi.SetValue(settings.exportDpi)
-        self.spinDpi.SetToolTipString('DPI of exported images')
+        self.spinDpi.SetToolTip('DPI of exported images')
         self.checkTune = wx.CheckBox(self, wx.ID_ANY,
                                      "Tune SDR#")
         self.checkTune.SetValue(settings.clickTune)
-        self.checkTune.SetToolTipString('Double click plot_line to tune SDR#')
-        textPlugin = wx.HyperlinkCtrl(self, wx.ID_ANY,
-                                      label="(Requires plugin)",
-                                      url="http://eartoearoak.com/software/sdrsharp-net-remote")
+        self.checkTune.SetToolTip('Double click plot_line to tune SDR#')
+        textPlugin = HyperlinkCtrl(self, wx.ID_ANY,
+                                   label="(Requires plugin)",
+                                   url="http://eartoearoak.com/software/sdrsharp-net-remote")
 
         self.radioAvg = wx.RadioButton(self, wx.ID_ANY, 'Average Scans',
                                        style=wx.RB_GROUP)
-        self.radioAvg.SetToolTipString('Average level with each scan')
+        self.radioAvg.SetToolTip('Average level with each scan')
         self.Bind(wx.EVT_RADIOBUTTON, self.__on_radio, self.radioAvg)
         self.radioRetain = wx.RadioButton(self, wx.ID_ANY,
                                           'Retain previous scans')
-        self.radioRetain.SetToolTipString('Can be slow')
+        self.radioRetain.SetToolTip('Can be slow')
         self.Bind(wx.EVT_RADIOBUTTON, self.__on_radio, self.radioRetain)
         self.radioRetain.SetValue(settings.retainScans)
 
@@ -269,7 +270,7 @@ class DialogPrefs(wx.Dialog):
         self.spinCtrlMaxScans = wx.SpinCtrl(self)
         self.spinCtrlMaxScans.SetRange(1, 5000)
         self.spinCtrlMaxScans.SetValue(settings.retainMax)
-        self.spinCtrlMaxScans.SetToolTipString('Maximum previous scans'
+        self.spinCtrlMaxScans.SetToolTip('Maximum previous scans'
                                                ' to display')
 
         textWidth = wx.StaticText(self, label="Line width")
@@ -392,7 +393,7 @@ class DialogAdvPrefs(wx.Dialog):
                                       settings.overlap * 100,
                                       0, 75,
                                       style=wx.SL_LABELS)
-        self.slideOverlap.SetToolTipString('Power spectral density'
+        self.slideOverlap.SetToolTip('Power spectral density'
                                            ' overlap')
         textWindow = wx.StaticText(self, label='Window')
         self.buttonWindow = wx.Button(self, wx.ID_ANY, self.winFunc)
@@ -442,12 +443,12 @@ class DialogFormatting(wx.Dialog):
         textFreq = wx.StaticText(self, label='Frequency precision')
         self.spinFreq = wx.SpinCtrl(self, wx.ID_ANY, min=0, max=6)
         self.spinFreq.SetValue(settings.precisionFreq)
-        self.spinFreq.SetToolTipString('Displayed frequency decimal precision')
+        self.spinFreq.SetToolTip('Displayed frequency decimal precision')
 
         textLevel = wx.StaticText(self, label='Level precision')
         self.spinLevel = wx.SpinCtrl(self, wx.ID_ANY, min=0, max=2)
         self.spinLevel.SetValue(settings.precisionLevel)
-        self.spinLevel.SetToolTipString('Displayed level decimal precision')
+        self.spinLevel.SetToolTip('Displayed level decimal precision')
 
         sizerButtons = wx.StdDialogButtonSizer()
         buttonOk = wx.Button(self, wx.ID_OK)
@@ -545,7 +546,8 @@ class DialogWinFunc(wx.Dialog):
 
     def __on_choice(self, _event):
         self.winFunc = WINFUNC[::2][self.choice.GetSelection()]
-        self.plot()
+        import pdb; pdb.set_trace()
+        self.__plot()
 
     def __on_ok(self, _event):
         self.EndModal(wx.ID_OK)
