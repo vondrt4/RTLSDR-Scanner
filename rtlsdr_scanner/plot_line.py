@@ -53,6 +53,7 @@ class Plotter(object):
         self.settings = settings
         self.axes = None
         # self.bar = None
+        self.scalarMap = None
         self.barBase = None
         self.threadPlot = None
         self.extent = None
@@ -85,9 +86,8 @@ class Plotter(object):
 
         self.bar_ax = self.figure.add_subplot(gs[1])
         norm = Normalize(vmin=-50, vmax=0)
-        
-        self.scalarMap = ScalarMappable(norm=norm)
         # self.barBase = ColorbarBase(self.bar_ax, norm=norm)
+        self.scalarMap = ScalarMappable(norm=norm)
         self.barBase = self.figure.colorbar(self.scalarMap, cax=self.bar_ax)
         self.set_colourmap_use(self.settings.colourMapUse)
 
@@ -227,18 +227,19 @@ class Plotter(object):
         label = self.labels[marker]
         yLim = self.axes.get_ylim()
         xLim = self.axes.get_xlim()
-        if xLim[0] <= x <= xLim[1]:
-            line.set_visible(True)
-            line.set_xdata([x, x])
-            line.set_ydata([yLim[0], yLim[1]])
-            self.axes.draw_artist(line)
-            label.set_visible(True)
-            label.set_position((x, yLim[1]))
-            self.axes.draw_artist(label)
-        elif x is not None and x < xLim[0]:
-            self.overflow['left'].append(marker)
-        elif x is not None and x > xLim[1]:
-            self.overflow['right'].append(marker)
+        if x is not None:
+            if xLim[0] <= x <= xLim[1]:
+                line.set_visible(True)
+                line.set_xdata([x, x])
+                line.set_ydata([yLim[0], yLim[1]])
+                self.axes.draw_artist(line)
+                label.set_visible(True)
+                label.set_position((x, yLim[1]))
+                self.axes.draw_artist(label)
+            elif x < xLim[0]:
+                self.overflow['left'].append(marker)
+            elif x > xLim[1]:
+                self.overflow['right'].append(marker)
 
     def __draw_overflow(self):
         for pos, overflow in list(self.overflow.items()):
@@ -316,9 +317,9 @@ class Plotter(object):
                 self.axes.set_ylim(self.extent.get_l())
                 if self.settings.plotFunc == PlotFunc.VAR and len(self.axes.collections) > 0:
                     norm = self.axes.collections[0].norm
-                    self.barBase.set_clim((norm.vmin, norm.vmax))
+                    self.scalarMap.set_clim((norm.vmin, norm.vmax))
                 else:
-                    self.barBase.set_clim(self.extent.get_l())
+                    self.scalarMap.set_clim(self.extent.get_l())
                     norm = Normalize(vmin=self.extent.get_l()[0],
                                      vmax=self.extent.get_l()[1])
                 for collection in self.axes.collections:
@@ -353,6 +354,7 @@ class Plotter(object):
                                      self.axes,
                                      spectrum,
                                      self.extent,
+                                     self.scalarMap,
                                      self.barBase,
                                      annotate)
         self.threadPlot.start()
@@ -424,7 +426,7 @@ class Plotter(object):
 
 class ThreadPlot(threading.Thread):
     def __init__(self, parent, settings, axes, data, extent,
-                 barBase, annotate):
+                 scalarMap, barBase, annotate):
         threading.Thread.__init__(self)
         self.name = "Plot"
         self.parent = parent
@@ -437,6 +439,7 @@ class ThreadPlot(threading.Thread):
         else:
             self.colourMap = get_colours()[0]
         self.lineWidth = settings.lineWidth
+        self.scalarMap = scalarMap
         self.barBase = barBase
         self.annotate = annotate
 
@@ -685,7 +688,7 @@ class ThreadPlot(threading.Thread):
 
     def __get_norm(self, autoL, extent):
         if autoL:
-            vmin, vmax = self.barBase.get_clim()
+            vmin, vmax = self.scalarMap.get_clim()
         else:
             yExtent = extent.get_l()
             vmin = yExtent[0]

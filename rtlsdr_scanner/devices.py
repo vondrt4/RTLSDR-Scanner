@@ -148,6 +148,11 @@ def get_devices_rtl(currentDevices=None, statusBar=None):
 
 def format_device_rtl_name(name):
     remove = ["/", "\\"]
+    try:
+        name = name.decode()
+    except AttributeError:
+        pass
+
     for char in remove:
         name = name.replace(char, " ")
 

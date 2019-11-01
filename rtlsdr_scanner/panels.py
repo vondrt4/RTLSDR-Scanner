@@ -28,6 +28,7 @@ import math
 import os
 import re
 import threading
+import locale
 
 from matplotlib import cm
 import matplotlib
@@ -907,11 +908,11 @@ class PanelMeasure(wx.Panel):
             end = None
 
             try:
-                start = float(self.grid.GetCellValue(self.locsFreq[0][0], self.locsFreq[0][1]))
+                start = locale.atof(self.grid.GetCellValue(self.locsFreq[0][0], self.locsFreq[0][1]))
             except ValueError:
                 pass
             try:
-                end = float(self.grid.GetCellValue(self.locsFreq[1][0], self.locsFreq[1][1]))
+                end = locale.atof(self.grid.GetCellValue(self.locsFreq[1][0], self.locsFreq[1][1]))
             except ValueError:
                 pass
 

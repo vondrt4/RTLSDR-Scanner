@@ -144,14 +144,14 @@ class Statusbar(wx.StatusBar):
             text = '{:.1f}%\n{}'.format(progress, delta)
 
         self.controls[3].SetValue(progress)
-        self.controls[3].SetToolTipString(self.__format_tooltip(text))
+        self.controls[3].SetToolTip(self.__format_tooltip(text))
 
     def show_progress(self):
         self.controls[3].Show()
 
     def hide_progress(self):
         self.controls[3].Hide()
-        self.controls[3].SetToolTipString('')
+        self.controls[3].SetToolTip('')
 
     def set_busy(self, busy):
         animCtrl = self.controls[4]

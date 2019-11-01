@@ -491,7 +491,7 @@ class FrameMain(wx.Frame):
     def __on_export_scan(self, _event):
         dlg = wx.FileDialog(self, "Export a scan", self.settings.dirExport,
                             self.filename, File.get_type_filters(),
-                            wx.SAVE | wx.OVERWRITE_PROMPT)
+                            wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         if dlg.ShowModal() == wx.ID_OK:
             self.status.set_general("Exporting...")
             fileName = dlg.GetFilename()
@@ -509,7 +509,7 @@ class FrameMain(wx.Frame):
                                 self.settings.dirExport,
                                 self.filename,
                                 File.get_type_filters(File.Types.IMAGE),
-                                wx.SAVE | wx.OVERWRITE_PROMPT)
+                                wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         dlgFile.SetFilterIndex(File.ImageType.PNG)
         if dlgFile.ShowModal() == wx.ID_OK:
             dlgImg = DialogImageSize(self, self.settings)

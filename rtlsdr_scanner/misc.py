@@ -28,6 +28,7 @@ import json
 from math import radians, sin, cos, asin, sqrt
 import math
 import os
+import locale
 import pkg_resources
 import socket
 import sys
@@ -162,13 +163,15 @@ def format_precision(settings, freq=None, level=None,
     if freq is not None:
         prec = settings.precisionFreq
         width = 4 + prec
-        textFreq = '{:{width}.{prec}f}'.format(freq, width=width, prec=prec)
+        # textFreq = '{:{width}.{prec}f}'.format(freq, width=width, prec=prec)
+        textFreq = locale.format('%{width}.{prec}f'.format(width=width, prec=prec), freq)
         if units or fancyUnits:
             textFreq += " MHz"
     if level is not None:
         prec = settings.precisionLevel
         width = 4 + prec
-        textLevel = '{:{width}.{prec}f}'.format(level, width=width, prec=prec)
+        # textLevel = '{:{width}.{prec}f}'.format(level, width=width, prec=prec)
+        textLevel = locale.format('%{width}.{prec}f'.format(width=width, prec=prec), level)
         if fancyUnits:
             textLevel += r" dB/Hz"
         elif units:

@@ -28,6 +28,7 @@ import time
 
 from matplotlib import cm, patheffects
 import matplotlib
+from matplotlib.cm import ScalarMappable
 from matplotlib.colorbar import ColorbarBase
 from matplotlib.colors import Normalize
 from matplotlib.dates import DateFormatter
@@ -54,7 +55,8 @@ class Spectrogram(object):
         self.axes = None
         self.plot = None
         self.extent = None
-        self.bar = None
+        # self.bar = None
+        self.scalarMap =None
         self.barBase = None
         self.lines = {}
         self.labels = {}
@@ -84,10 +86,13 @@ class Spectrogram(object):
         now = time.time()
         self.axes.set_ylim(utc_to_mpl(now), utc_to_mpl(now - 10))
 
-        self.bar = self.figure.add_subplot(gs[1])
+        self.bar_ax = self.figure.add_subplot(gs[1])
         norm = Normalize(vmin=-50, vmax=0)
-        self.barBase = ColorbarBase(self.bar, norm=norm,
-                                    cmap=cm.get_cmap(self.settings.colourMap))
+        # self.barBase = ColorbarBase(self.bar, norm=norm,
+        #                             cmap=cm.get_cmap(self.settings.colourMap))
+        self.scalarMap = ScalarMappable(norm=norm, cmap=cm.get_cmap(
+            self.settings.colourMap))
+        self.barBase = self.figure.colorbar(self.scalarMap, cax=self.bar_ax)
 
         self.__setup_measure()
         self.__setup_overflow()
@@ -226,7 +231,7 @@ class Spectrogram(object):
                 self.axes.set_xlim(extent[0], extent[1])
             if self.settings.autoL or force:
                 vmin, vmax = self.plot.get_clim()
-                self.barBase.set_clim(vmin, vmax)
+                self.scalarMap.set_clim(vmin, vmax)
                 try:
                     self.barBase.draw_all()
                 except:
@@ -347,7 +352,7 @@ class ThreadPlot(threading.Thread):
 
         norm = None
         if not self.settings.autoL:
-            minY, maxY = self.barBase.get_clim()
+            minY, maxY = self.scalarMap.get_clim()
             norm = Normalize(vmin=minY, vmax=maxY)
 
         extent = self.extent.get_ft()
