@@ -379,7 +379,7 @@ class TickCellRenderer(GridCellRenderer):
 
     def Draw(self, grid, attr, dc, rect, row, col, _isSelected):
         dc.SetBrush(wx.Brush(attr.GetBackgroundColour()))
-        dc.DrawRectangleRect(rect)
+        dc.DrawRectangle(rect)
 
         gc = wx.GraphicsContext.Create(dc)
         gc.SetPen(wx.Pen(attr.GetTextColour()))

@@ -74,7 +74,7 @@ class DialogDevicesRTL(wx.Dialog):
         dc.SetFont(self.gridDev.GetLabelFont())
         maxHeight = 0
         for i in range(self.COLS - 1):
-            _w, h, _hl = dc.GetMultiLineTextExtent(self.gridDev.GetColLabelValue(i))
+            _w, h, _hl = dc.GetFullMultiLineTextExtent(self.gridDev.GetColLabelValue(i))
             if h > maxHeight:
                 maxHeight = h
         self.gridDev.SetColLabelSize(maxHeight * 1.25)
@@ -338,7 +338,8 @@ class DialogDevicesGPS(wx.Dialog):
     def __set_dev_grid(self):
         self.gridDev.Unbind(grid.EVT_GRID_EDITOR_CREATED)
         self.Unbind(grid.EVT_GRID_CELL_LEFT_CLICK)
-        self.Unbind(grid.EVT_GRID_CELL_CHANGE)
+        if wx.VERSION >= (3, 0, 0, 0):
+            self.Unbind(grid.EVT_GRID_CELL_CHANGED)
         self.gridDev.ClearGrid()
 
         i = 0
@@ -379,7 +380,8 @@ class DialogDevicesGPS(wx.Dialog):
 
         self.gridDev.Bind(grid.EVT_GRID_EDITOR_CREATED, self.__on_create)
         self.Bind(grid.EVT_GRID_CELL_LEFT_CLICK, self.__on_click)
-        self.Bind(grid.EVT_GRID_CELL_CHANGE, self.__on_change)
+        if wx.VERSION >= (3, 0, 0, 0):
+            self.Bind(grid.EVT_GRID_CELL_CHANGED, self.__on_change)
 
     def __set_button_state(self):
         if len(self.devices) > 0:
