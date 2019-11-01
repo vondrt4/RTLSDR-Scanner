@@ -472,7 +472,7 @@ class FrameMain(wx.Frame):
         dlg = wx.FileDialog(self, "Save a scan", self.settings.dirScans,
                             self.filename,
                             File.get_type_filters(File.Types.SAVE),
-                            wx.SAVE | wx.OVERWRITE_PROMPT)
+                            wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         if dlg.ShowModal() == wx.ID_OK:
             self.status.set_general("Saving...")
             fileName = dlg.GetFilename()

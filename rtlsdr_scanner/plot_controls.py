@@ -201,7 +201,7 @@ class RangeSelector():
         self.rect.set_height(yMax - yMin)
 
         # if self.axes._cachedRenderer is not None:
-        self.axes.draw_artist(self.rect)
+        # self.axes.draw_artist(self.rect)
 
     def hide(self):
         self.rect.set_visible(False)

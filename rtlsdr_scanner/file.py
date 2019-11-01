@@ -467,11 +467,11 @@ def export_map(filename, exportType, bounds, image, xyz):
 
 def export_csv(handle, spectrum, header=True):
     if header:
-        handle.write("Time (UTC), Frequency (MHz),Level (dB/Hz)\n")
+        handle.write("Time (UTC), Frequency (MHz),Level (dB/Hz)\n".encode())
     if spectrum is not None:
         for plot in list(spectrum.items()):
             for freq, pwr in list(plot[1].items()):
-                handle.write("{}, {}, {}\n".format(plot[0], freq, pwr))
+                handle.write("{}, {}, {}\n".format(plot[0], freq, pwr).encode())
 
 
 def export_plt(handle, spectrum):
