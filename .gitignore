@@ -1,11 +1,12 @@
 bin
+data
 dist
+images
 include
 lib
 lib64
+scans
 share
-data
-images
 rtlsdr
 pyvenv.cfg
 pip-selfcheck.json
