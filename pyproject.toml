@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "rtlsdr-scanner"
+version = "1.2.3"
+description = "Cross Platform frequency scanning gui"
+authors = ["anoduck <11767-anoduck@users.noreply.gitgud.io>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "rtlsdr_scanner"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+numpy = "^1.25.0"
+matplotlib = "^3.7.1"
+Pillow = "^9.5.0"
+pyrtlsdr = "^0.2.93"
+pyserial = "^3.5"
+visvis = "^1.14.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
