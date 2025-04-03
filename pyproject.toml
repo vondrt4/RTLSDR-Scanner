@@ -8,14 +8,13 @@ readme = "README.md"
 packages = [{include = "rtlsdr_scanner"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.11.2"
 numpy = "^1.25.0"
-matplotlib = "^3.7.1"
+matplotlib = "<3.4.0"
 Pillow = "^9.5.0"
 pyrtlsdr = "^0.2.93"
 pyserial = "^3.5"
 visvis = "^1.14.0"
-
 
 [build-system]
 requires = ["poetry-core"]

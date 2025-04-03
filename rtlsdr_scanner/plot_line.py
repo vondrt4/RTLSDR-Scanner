@@ -376,10 +376,10 @@ class Plotter(object):
     def set_bar(self, on):
         self.barBase.ax.set_visible(on)
         if on:
-            self.axes.change_geometry(1, 2, 1)
+            #self.axes.change_geometry(1, 2, 1)
             self.axes.get_subplotspec().get_gridspec().set_width_ratios([9.5, 0.5])
-        else:
-            self.axes.change_geometry(1, 1, 1)
+        #else:
+            #self.axes.change_geometry(1, 1, 1)
 
         self.figure.subplots_adjust()
 

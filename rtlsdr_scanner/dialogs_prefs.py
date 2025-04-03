@@ -223,7 +223,7 @@ class DialogPrefs(wx.Dialog):
         self.checkAlert.SetToolTip('Play alert when level exceeded')
         self.Bind(wx.EVT_CHECKBOX, self.__on_alert, self.checkAlert)
         self.spinLevel = wx.SpinCtrl(self, wx.ID_ANY, min=-100, max=20)
-        self.spinLevel.SetValue(settings.alertLevel)
+        self.spinLevel.SetValue(int(settings.alertLevel))
         self.spinLevel.Enable(settings.alert)
         self.spinLevel.SetToolTip('Alert threshold')
         textBackground = wx.StaticText(self, label='Background colour')
@@ -390,7 +390,7 @@ class DialogAdvPrefs(wx.Dialog):
 
         textOverlap = wx.StaticText(self, label='PSD Overlap (%)')
         self.slideOverlap = wx.Slider(self, wx.ID_ANY,
-                                      settings.overlap * 100,
+                                      int(settings.overlap * 100),
                                       0, 75,
                                       style=wx.SL_LABELS)
         self.slideOverlap.SetToolTip('Power spectral density'

@@ -151,7 +151,7 @@ class MultiButton(wx.PyControl):
 
         dc.DrawText(self.GetLabel(),
                     self.PADDING * 2,
-                    (rect.height - textHeight) / 2)
+                    int((rect.height - textHeight) / 2))
 
         top = (rect.height / 2) - (self.ARROW_SIZE / 4)
         bottom = top + self.ARROW_SIZE / 2
@@ -159,10 +159,10 @@ class MultiButton(wx.PyControl):
         left = right - self.ARROW_SIZE
         dc.DrawPolygon([(right, top),
                         (left, top),
-                        (left + self.ARROW_SIZE / 2, bottom)])
+                        (int(left + self.ARROW_SIZE / 2), bottom)])
         left = right - (self.ARROW_SIZE * 2)
-        top = rect.height / 4
-        bottom = rect.height * 3 / 4
+        top = int(rect.height / 4)
+        bottom = int(rect.height * 3 / 4)
         dc.DrawLine(left, top, left, bottom)
 
     def DoGetBestSize(self):
@@ -246,7 +246,7 @@ class Led(wx.PyControl):
         gc.FillPath(path)
         gc.StrokePath(path)
 
-        dc.DrawText(label, height + 10, (height - textHeight) / 2)
+        dc.DrawText(label, height + 10, int((height - textHeight) / 2))
 
     def on(self, colour=wx.GREEN):
         self.timer.Stop()
@@ -334,7 +334,7 @@ class SatLevel(wx.PyControl):
 
             widthText, heightText = dc.GetTextExtent(text)
             dc.DrawRotatedText(text,
-                               x + widthBar / 2 - heightText / 2,
+                               int(x + widthBar / 2 - heightText / 2),
                                height - widthText + self.PADDING * 2,
                                90)
 

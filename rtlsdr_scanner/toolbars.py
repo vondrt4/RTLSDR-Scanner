@@ -143,7 +143,7 @@ class Statusbar(wx.StatusBar):
             delta = timedelta(seconds=math.ceil(timeLeft))
             text = '{:.1f}%\n{}'.format(progress, delta)
 
-        self.controls[3].SetValue(progress)
+        self.controls[3].SetValue(int(progress))
         self.controls[3].SetToolTip(self.__format_tooltip(text))
 
     def show_progress(self):
@@ -367,7 +367,7 @@ class NavigationToolbar(NavigationToolbar2WxAgg):
         self.panel.redraw_plot()
 
     def __on_colour_use(self, event):
-        check = event.IsIsChecked()
+        check = event.IsChecked()
         self.settings.colourMapUse = check
         self.colourId.Enable(check)
         self.plot.set_colourmap_use(check)

@@ -4,10 +4,13 @@ Copyright 2012 - 2015 Al Brown
 
 al [at] eartoearoak.com
 
+This repository is an attempt to make this great utility work on modern Linux, e.g. Ubuntu 2404. It will not work on Python >= 3.12, so have Python 3.11 installed.
 
 A cross platform Python frequency scanning GUI for the OsmoSDR rtl-sdr [library](http://sdr.osmocom.org/trac/wiki/rtl-sdr).
 
 More details can be found [here](http://eartoearoak.com/software/rtlsdr-scanner).
+
+Archive.org mirror available [here](http://web.archive.org/web/20210228041045/https://eartoearoak.com/software/rtlsdr-scanner).
 
 A basic [user manual](https://github.com/EarToEarOak/RTLSDR-Scanner/blob/master/doc/Manual.pdf?raw=true) is also available.
 
@@ -42,9 +45,13 @@ To test for missing libraries run `rtlsdr_scan_diag.py`
 
 Windows 64 bit modules can be found [here](http://www.lfd.uci.edu/~gohlke/pythonlibs/)
 
+## Installation instructions for this repository ##
+
+Install a virtual environment in the directory where you cloned the git repository using `poetry env use 3.11`, `poetry install`.
+
 ## Usage ##
 
-`python -m rtlsdr_scanner [file]`
+`poetry run python3 -m rtlsdr_scanner [file]`
 
     file - optional saved scan file to load
 

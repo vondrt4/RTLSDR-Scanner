@@ -39,6 +39,7 @@ from matplotlib.colorbar import ColorbarBase
 from matplotlib.colors import Normalize
 from matplotlib.dates import num2epoch
 from matplotlib.lines import Line2D
+from matplotlib import figure
 from matplotlib.ticker import AutoMinorLocator, ScalarFormatter
 import wx
 import wx.grid as wxGrid
@@ -97,7 +98,7 @@ class PanelGraph(wx.Panel):
         wx.Panel.__init__(self, panel)
 
         self.figure = matplotlib.figure.Figure(facecolor='white')
-        self.figure.set_size_inches(0, 0)
+        self.figure.set_size_inches(1, 1)
         self.canvas = FigureCanvas(self, -1, self.figure)
         self.canvas.SetToolTip(self.toolTip)
 
@@ -661,7 +662,7 @@ class PanelLine(wx.Panel):
         dc.SetBackground(brush)
 
         dc.Clear()
-        dc.DrawLine(0, height / 2., width, height / 2.)
+        dc.DrawLine(0, int(height / 2.), width, int(height / 2.))
 
 
 class PanelMeasure(wx.Panel):
@@ -764,11 +765,11 @@ class PanelMeasure(wx.Panel):
         for _desc, (_row, col) in list(self.locsDesc.items()):
             self.grid.AutoSizeColumn(col)
         for col in [1, 5, 14, 18]:
-            self.grid.SetColSize(col, widthMHz)
+            self.grid.SetColSize(col, int(widthMHz))
             for row in range(self.grid.GetNumberRows()):
                 self.grid.SetCellFont(row, col, font)
         for col in [6, 10]:
-            self.grid.SetColSize(col, widthdB)
+            self.grid.SetColSize(col, int(widthdB))
             for row in range(self.grid.GetNumberRows()):
                 self.grid.SetCellFont(row, col, font)
         for _desc, (_row, col) in list(self.locsCheck.items()):
